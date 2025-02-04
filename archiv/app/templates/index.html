@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ArUco Pose Estimation</title>
+</head>
+<body>
+    <h1>ArUco Pose Estimation</h1>
+    <img src="/stream" style="border: 1px solid black; width: 640px; height: 480px;">
+    <h3>Pose Data:</h3>
+    <pre id="pose-data"></pre>
+    <script>
+        const ws = new WebSocket(`ws://${window.location.host}/pose`);
+        ws.onopen = () => console.log("WebSocket connection established.");
+        ws.onmessage = (event) => {
+            console.log("Received pose data:", event.data);
+            const data = JSON.parse(event.data);
+            const formattedData = JSON.stringify(data, null, 4);  // 4-space indentation
+            document.getElementById("pose-data").innerText = formattedData;
+        };
+        ws.onerror = (error) => console.error("WebSocket error:", error);
+        ws.onclose = () => console.log("WebSocket connection closed.");
+    </script>
+</body>
+</html>
