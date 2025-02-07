@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import useWebSocket from "../hooks/useWebSocket";
+import { WS_BASE_URL } from "../config";
+
 
 const VideoStream = () => {
-  const { message } = useWebSocket("ws://localhost:8000/video");
+  const { message } = useWebSocket(`${WS_BASE_URL}/video`);
   const [currentFrame, setCurrentFrame] = useState("");
 
   useEffect(() => {

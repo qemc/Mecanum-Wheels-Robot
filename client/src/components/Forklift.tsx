@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import useWebSocket from "../hooks/useWebSocket";
+import { WS_BASE_URL } from "../config";
+
 
 interface ForkliftState {
   command_up: boolean;
@@ -16,7 +18,7 @@ interface ForkliftCommand {
 
 const Forklift = () => {
 
-  const { message, sendMessage } = useWebSocket("ws://localhost:8000/forklift");
+  const { message, sendMessage } = useWebSocket(`${WS_BASE_URL}/forklift`);
   
   const [state, setState] = useState<ForkliftState>({
     command_up: false,

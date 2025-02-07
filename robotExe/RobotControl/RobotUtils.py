@@ -10,13 +10,12 @@ MIN_RPM = 20
 WHEEL_RADIUS = 0.04
 PI = np.pi
 LXLY = 0.1748
-
 WHEEL_V_MIN = (MIN_RPM * 2 * PI * WHEEL_RADIUS)/60
 DESIRED_ANGLE = 0
 ANGLE_THRESHOLD = 2
-Y_THRESHOLD = 33
+Y_THRESHOLD = 35
 X_THRESHOLD = 2
-DESIRED_Y = 32
+DESIRED_Y = 35
 DESIRED_X = 0
 TIMEOUT = 5.0
 
@@ -67,6 +66,7 @@ def AlignAngle(angle, commandHandler: CommandHandler):
 
 
 def rotate(command_handler: CommandHandler):
+    
     omega_z = -1  
     
     fl, fr, rl, rr = kinematics(0, 0, omega_z)

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import useWebSocket from "../hooks/useWebSocket";
+import { WS_BASE_URL } from "../config";
 
 const RunControl = () => {
 
-  const {message, sendMessage} = useWebSocket("ws://localhost:8000/runPick")
-  const [status, setStatus] = useState<string|null>(null); //mode from server
+  const {message, sendMessage} = useWebSocket(`${WS_BASE_URL}/runPick`)
+  const [status, setStatus] = useState<string|null>(null); 
   const [startPickingProcess, setPickingProcess] = useState<boolean|null>(null);
 
 

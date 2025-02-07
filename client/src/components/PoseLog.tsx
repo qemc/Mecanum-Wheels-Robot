@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useWebSocket from "../hooks/useWebSocket";
+import { WS_BASE_URL } from "../config";
 
 interface Marker {
     id: number;
@@ -9,16 +10,15 @@ interface Marker {
 }
 
 const PoseLog = () => {
-    const { message } = useWebSocket("ws://localhost:8000/pose");
+    const { message } = useWebSocket(`${WS_BASE_URL}/pose`);
     const [markers, setMarkers] = useState<{ [key: number]: Marker | null }>({ 0: null, 1: null });
 
     useEffect(() => {
         if (message) {
             try {
-                const parsedMarkers: Marker[] = JSON.parse(message); // Parse the latest message
+                const parsedMarkers: Marker[] = JSON.parse(message);
                 const newMarkers: { [key: number]: Marker | null } = { 0: null, 1: null };
 
-                // Process the array of markers
                 if (Array.isArray(parsedMarkers)) {
                     parsedMarkers.forEach((marker) => {
                         if (marker.id === 0 || marker.id === 1) {
@@ -27,7 +27,7 @@ const PoseLog = () => {
                     });
                 }
 
-                setMarkers(newMarkers); // Update markers state
+                setMarkers(newMarkers);
             } catch (error) {
                 console.error("Failed to parse pose data:", error);
             }

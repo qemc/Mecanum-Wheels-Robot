@@ -1,5 +1,6 @@
 import numpy as np
 
+# class responsible for exrtacting the target information, that robot should focus on
 class Target:
     
     def __init__(self):
@@ -12,7 +13,6 @@ class Target:
     def getPoseData(self, pose, id):
     
         if len(pose) > 0:
-            
             for x in pose:
                 if x.get("id") == id:
                     

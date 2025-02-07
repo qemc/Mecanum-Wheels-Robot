@@ -1,5 +1,3 @@
-# arucoDetector.py
-
 import cv2
 import math
 from ArucoDetection.arucoConfig import ArucoConfig
@@ -32,8 +30,6 @@ class ArucoDetector:
         
         x_cm = float(tvec[0][0] * 100)
         z_cm = float(tvec[0][2] * 100 * self.correction_factor)
-        
-        #do oganięcia co się tu dzieje
         rot_mat, _ = cv2.Rodrigues(rvec)
         roll_rad = math.atan2(rot_mat[0, 2], rot_mat[2, 2])
         roll_deg = normalize_angle(math.degrees(roll_rad))

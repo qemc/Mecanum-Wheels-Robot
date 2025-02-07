@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import useWebSocket from "../hooks/useWebSocket";
+import { WS_BASE_URL } from "../config";
 
 const ModeControl = () => {
 
-  const {message, sendMessage} = useWebSocket("ws://localhost:8000/mode")
+  const {message, sendMessage} = useWebSocket(`${WS_BASE_URL}/mode`)
   const [mode, setMode] = useState<string|null>(null); 
 
   useEffect(() => {
