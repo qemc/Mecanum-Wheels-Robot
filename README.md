@@ -1,1 +1,1 @@
-Full project description - in progress
+Full project description - in progress :)
