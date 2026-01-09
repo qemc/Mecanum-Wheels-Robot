@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import useWebSocket from "../hooks/useWebSocket";
 import { WS_BASE_URL } from "../config";
 
-
 interface ForkliftState {
   command_up: boolean;
   command_down: boolean;
@@ -17,9 +16,8 @@ interface ForkliftCommand {
 }
 
 const Forklift = () => {
-
   const { message, sendMessage } = useWebSocket(`${WS_BASE_URL}/forklift`);
-  
+
   const [state, setState] = useState<ForkliftState>({
     command_up: false,
     command_down: false,
@@ -39,8 +37,7 @@ const Forklift = () => {
   }, [message]);
 
   const sendCommand = (command: ForkliftCommand) => {
-    
-      sendMessage(JSON.stringify(command));
+    sendMessage(JSON.stringify(command));
   };
 
   const forkliftUp = () => {
@@ -71,27 +68,25 @@ const Forklift = () => {
 
   return (
     <div className="forklift-control">
-     
-      
       <div className="button-group">
-        <button 
-          onClick={forkliftUp} 
+        <button
+          onClick={forkliftUp}
           disabled={isDisabled}
           className={state.command_up ? 'active' : ''}
         >
           Up
         </button>
-        
-        <button 
-          onClick={forkliftDown} 
+
+        <button
+          onClick={forkliftDown}
           disabled={isDisabled}
           className={state.command_down ? 'active' : ''}
         >
           Down
         </button>
-        
-        <button 
-          onClick={forkliftZero} 
+
+        <button
+          onClick={forkliftZero}
           disabled={isDisabled}
           className={state.zero ? 'active' : ''}
         >

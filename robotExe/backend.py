@@ -1,5 +1,3 @@
-# backend.py
-
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -10,15 +8,14 @@ from sharedData import shared_data
 from initialization import initialize_all
 
 
-# uvicorn backend:app --host 0.0.0.0 --port 8000
-
 class PickingProcessRequest(BaseModel):
     picking_process: bool
-    
+
 
 async def app_lifespan(app: FastAPI):
     initialize_all()
     yield
+
 
 app = FastAPI(lifespan=app_lifespan)
 
@@ -31,23 +28,19 @@ app.add_middleware(
 )
 
 
-    
 @app.websocket("/runPick")
 async def handle_picking(ws: WebSocket):
     await ws.accept()
     print("Picking Handler WebSocket connected")
 
     async def send_updates():
-        """Send updates to the frontend at regular intervals."""
         last_status = None
         last_start_picking_process = None
         while True:
-            
             current_status = shared_data.get_picking_status()
             current_start_picking_process = shared_data.get_start_picking_process()
 
             if (current_status != last_status) or (current_start_picking_process != last_start_picking_process):
-                
                 data_to_send = {
                     'status': current_status,
                     'start_picking_process': current_start_picking_process
@@ -58,21 +51,20 @@ async def handle_picking(ws: WebSocket):
                 last_status = current_status
                 last_start_picking_process = current_start_picking_process
 
-            await asyncio.sleep(0.5) 
+            await asyncio.sleep(0.5)
 
     async def receive_messages():
-
         while True:
             try:
                 new_data = await ws.receive_json()
                 if "start_picking_process" in new_data:
                     shared_data.set_start_picking_process(new_data["start_picking_process"])
                     print("Received from frontend:", new_data)
-                    
+
             except WebSocketDisconnect:
                 print("Picking Handler disconnected")
                 break
-            
+
             except Exception as e:
                 print(f"Picking Handler Error: {e}")
                 break
@@ -82,38 +74,35 @@ async def handle_picking(ws: WebSocket):
     except WebSocketDisconnect:
         print("Picking Handler WebSocket disconnected")
 
-        
+
 @app.websocket("/mode")
 async def handle_mode_selection(ws: WebSocket):
-    
     await ws.accept()
     print("Mode Handler Websocket connected")
-    
+
     try:
         while True:
-            
             current_mode = shared_data.get_mode()
-                
+
             await ws.send_json({
                 'mode': current_mode
             })
-            
+
             new_mode = await ws.receive_json()
             shared_data.set_mode(new_mode.get("mode"))
-            
+
     except WebSocketDisconnect:
         print("Mode Handler disconnected")
     except Exception as e:
         print(f"Mode Handler Error: {e}")
-        
-        
+
+
 @app.websocket("/forklift")
 async def forklift_control(ws: WebSocket):
     await ws.accept()
     print("Forklift WebSocket connected")
 
     async def send_updates():
-        """Send updates to the frontend at regular intervals."""
         last_state = None
         while True:
             current_state = {
@@ -128,10 +117,9 @@ async def forklift_control(ws: WebSocket):
                 print("Sent to frontend:", current_state)
                 last_state = current_state
 
-            await asyncio.sleep(0.5)  
-            
+            await asyncio.sleep(0.5)
+
     async def receive_commands():
-        """Receive and process commands from the frontend."""
         while True:
             try:
                 new_command = await asyncio.wait_for(ws.receive_json(), timeout=1.0)
@@ -168,54 +156,50 @@ async def forklift_control(ws: WebSocket):
         print("Forklift WebSocket disconnected")
     except Exception as e:
         print(f"Forklift WebSocket Error: {e}")
-        
+
 
 @app.websocket("/video")
 async def video_stream(ws: WebSocket):
-    
     await ws.accept()
     print("Video client connected")
-    
+
     try:
         while True:
             frame = shared_data.get_frame()
-            
+
             if frame is not None:
                 _, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 60])
                 data = f"data:image/jpeg;base64,{base64.b64encode(buffer).decode('utf-8')}"
                 await ws.send_text(data)
-                
+
             await asyncio.sleep(0.2)
-            
+
     except WebSocketDisconnect:
         print("Video client disconnected")
-        
+
     except Exception as e:
         print(f"Video error: {e}")
-        
-        
 
 
 @app.websocket("/pose")
 async def pose_stream(ws: WebSocket):
-    
     await ws.accept()
     print("Pose client connected")
-    
+
     try:
         while True:
             data = shared_data.get_pose_data()
-            
+
             await ws.send_json(data)
             await asyncio.sleep(0.5)
-            
+
     except WebSocketDisconnect:
         print("Pose client disconnected")
-        
+
     except Exception as e:
         print(f"Pose error: {e}")
+
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
