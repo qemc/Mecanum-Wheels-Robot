@@ -89,37 +89,6 @@ The front-mounted forklift operates via a lead screw driven by a stepper motor:
 ### System Architecture
 
 ```
-<<<<<<< HEAD
-┌─────────────────────────────────────────────────────────────────┐
-│                     Raspberry Pi 5                              │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐  │
-│  │ Vision      │  │ Decision    │  │ FastAPI                 │  │
-│  │ (OpenCV +   │→ │ Logic       │→ │ WebSocket Server        │  │
-│  │  DepthAI)   │  │             │  │                         │  │
-│  └─────────────┘  └──────┬──────┘  └───────────┬─────────────┘  │
-│                          │                     │                │
-└──────────────────────────┼─────────────────────┼────────────────┘
-                           │ UART                │ WebSocket
-                           ↓                     ↓
-                    ┌─────────────┐       ┌─────────────┐
-                    │ ESP32-S3    │       │ Web Browser │
-                    │ Motor       │       │ (React UI)  │
-                    │ Controller  |       └─────────────┘
-                    └──────┬──────┘
-                           │ PWM + Direction
-                           ↓
-                    ┌─────────────┐
-                    │ L298N ×2    │
-                    │ Motor       │
-                    │ Drivers     │
-                    └──────┬──────┘
-                           │
-                           ↓
-                    ┌─────────────┐
-                    │ DC Motors   │
-                    │ ×4          │
-                    └─────────────┘
-=======
 ┌──────────────────┐
 │    Web Browser   │
 │    (React UI)    │
@@ -142,7 +111,6 @@ The front-mounted forklift operates via a lead screw driven by a stepper motor:
 │   Motor Driver  │←────────────────────│   + DC Motors   │
 │   (PID Control) │     Encoder pulses  │   with Encoders │
 └─────────────────┘                     └─────────────────┘
->>>>>>> 77b559b (architecture diagram fix)
 ```
 
 ### Custom PCB
