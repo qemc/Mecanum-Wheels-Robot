@@ -90,20 +90,20 @@ The front-mounted forklift operates via a lead screw driven by a stepper motor:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                      Raspberry Pi 5                              │
+│                     Raspberry Pi 5                              │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐  │
 │  │ Vision      │  │ Decision    │  │ FastAPI                 │  │
 │  │ (OpenCV +   │→ │ Logic       │→ │ WebSocket Server        │  │
 │  │  DepthAI)   │  │             │  │                         │  │
 │  └─────────────┘  └──────┬──────┘  └───────────┬─────────────┘  │
-│                          │                      │                │
-└──────────────────────────┼──────────────────────┼────────────────┘
-                           │ UART                  │ WebSocket
-                           ↓                      ↓
-                    ┌─────────────┐         ┌─────────────┐
-                    │ ESP32-S3    │         │ Web Browser │
-                    │ Motor       │         │ (React UI)  │
-                    │ Controller  │         └─────────────┘
+│                          │                     │                │
+└──────────────────────────┼─────────────────────┼────────────────┘
+                           │ UART                │ WebSocket
+                           ↓                     ↓
+                    ┌─────────────┐       ┌─────────────┐
+                    │ ESP32-S3    │       │ Web Browser │
+                    │ Motor       │       │ (React UI)  │
+                    │ Controller  |       └─────────────┘
                     └──────┬──────┘
                            │ PWM + Direction
                            ↓
